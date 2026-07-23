@@ -23,7 +23,7 @@
             margin: 0;
             padding: 20px;
             line-height: 1.6;
-            overflow-x: hidden; /* Чтобы выезжающие панели не ломали скролл */
+            overflow-x: hidden;
         }
 
         .container {
@@ -61,26 +61,25 @@
             font-size: 15px;
         }
 
-        /* --- Меню кнопок (разбросанные, крупные) --- */
+        /* --- Кнопки тем (крупные, с отступами, не в линию) --- */
         .themes-menu {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 25px; /* Большой отступ между кнопками */
+            gap: 25px;
             margin-bottom: 30px;
         }
         .theme-btn {
             background: white;
             border: 1px solid #eee;
             color: var(--text);
-            padding: 16px 24px; /* Кнопки стали крупнее */
+            padding: 16px 24px;
             border-radius: 50px;
             cursor: pointer;
             font-weight: 600;
             font-size: 16px;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-            position: relative;
         }
         .theme-btn:hover {
             transform: scale(1.05) translateY(-4px);
@@ -114,7 +113,6 @@
             backdrop-filter: blur(6px);
             z-index: 1;
         }
-        
         .panel {
             position: relative;
             background: white;
@@ -126,18 +124,16 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.15);
             transform-origin: center;
             z-index: 2;
-            /* Базовое состояние: панель скрыта за пределами экрана */
             transform: translate3d(0, 0, 0); 
             transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Специфичные позиции для каждой панели */
-        #drawer-victories .panel { transform: translateX(-110%); } /* Слева */
-        #drawer-cool .panel { transform: translateX(110%); }       /* Справа */
-        #drawer-gallery .panel { transform: translateY(110%); }    /* Снизу */
-        #drawer-playlist .panel { transform: translateY(-110%); } /* Сверху */
+        /* Разные стороны выезда */
+        #drawer-victories .panel { transform: translateX(-110%); } /* слева */
+        #drawer-cool .panel { transform: translateX(110%); }       /* справа */
+        #drawer-gallery .panel { transform: translateY(110%); }    /* снизу */
+        #drawer-playlist .panel { transform: translateY(-110%); }  /* сверху */
 
-        /* Состояние открытой панели */
         .drawer.open {
             opacity: 1;
             visibility: visible;
@@ -178,7 +174,6 @@
             vertical-align: middle;
         }
 
-        /* Галерея */
         .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -194,7 +189,6 @@
         }
         .gallery-img:hover { transform: scale(1.08); }
 
-        /* Кнопка поддержки */
         .support-btn {
             display: block;
             width: 100%;
@@ -211,7 +205,6 @@
         }
         .support-btn:active { transform: scale(0.98); }
 
-        /* Поле ввода */
         #new-achievement-input {
             width: 100%;
             padding: 14px;
@@ -232,7 +225,6 @@
             font-size: 16px;
         }
 
-        /* Плейлист */
         .track-item {
             display: flex;
             align-items: center;
@@ -265,7 +257,6 @@
             font-size: 14px;
         }
 
-        /* Список «Почему ты крутой» */
         .cool-list { display: flex; flex-direction: column; gap: 14px; }
         .cool-item {
             padding: 16px;
@@ -296,7 +287,7 @@
         </h1>
         <p class="subtitle">Когда тяжело — открой этот сайт. Здесь всё, что напоминает: ты уже столько прошёл.</p>
 
-        <!-- Кнопки тем (теперь крупные и с отступами) -->
+        <!-- Кнопки тем -->
         <div class="themes-menu">
             <button class="theme-btn active" data-target="victories">🏆 Победы</button>
             <button class="theme-btn" data-target="cool">💖 Почему ты крутой</button>
@@ -306,7 +297,7 @@
 
         <!-- Панели (выезжают с разных сторон) -->
         
-        <!-- 1. Победы (слева) -->
+        <!-- Победы (слева) -->
         <div id="drawer-victories" class="drawer">
             <div class="overlay"></div>
             <div class="panel">
@@ -324,7 +315,7 @@
             </div>
         </div>
 
-        <!-- 2. Почему ты крутой (справа) -->
+        <!-- Почему ты крутой (справа) -->
         <div id="drawer-cool" class="drawer">
             <div class="overlay"></div>
             <div class="panel">
@@ -334,7 +325,7 @@
             </div>
         </div>
 
-        <!-- 3. Галерея (снизу) -->
+        <!-- Галерея (снизу) -->
         <div id="drawer-gallery" class="drawer">
             <div class="overlay"></div>
             <div class="panel">
@@ -344,7 +335,7 @@
             </div>
         </div>
 
-        <!-- 4. Плейлист (сверху) -->
+        <!-- Плейлист (сверху) -->
         <div id="drawer-playlist" class="drawer">
             <div class="overlay"></div>
             <div class="panel">
@@ -367,12 +358,32 @@
     <script>
         // --- Логика открытия/закрытия панелей ---
         function openDrawer(targetId) {
-            // Закрываем все панели
             document.querySelectorAll('.drawer').forEach(d => d.classList.remove('open'));
-            
-            // Убираем активный класс у кнопок
             document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
 
-            // Открываем нужную
             const drawer = document.getElementById('drawer-' + targetId);
-            const
+            const btn = Array.from(document.querySelectorAll('.theme-btn')).find(b => b.getAttribute('data-target') === targetId);
+
+            if (drawer) drawer.classList.add('open');
+            if (btn) btn.classList.add('active');
+        }
+
+        function closeDrawer(targetId) {
+            const drawer = document.getElementById('drawer-' + targetId);
+            if (drawer) drawer.classList.remove('open');
+
+            document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    openDrawer(target);
+                });
+            });
+
+            // --- Плейлист (добавлен Santiz — «Нимфоманка») ---
+            const playlistData = [
+                { num: 1, title: 'Малиновый закат', artist: 'Макс Корж', link: 'https://music.yandex.ru/album/5489197/track/41747947' },
+                { num: 2, title: '10', artist: 'Эндшпиль feat. Andy Panda', link: 'https://music.yandex.ru/album/6358
