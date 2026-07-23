@@ -23,6 +23,7 @@
             margin: 0;
             padding: 20px;
             line-height: 1.6;
+            overflow-x: hidden; /* Чтобы выезжающие панели не ломали скролл */
         }
 
         .container {
@@ -30,14 +31,14 @@
             margin: 0 auto;
         }
 
-        /* Анимация заголовка */
+        /* --- Анимация заголовка --- */
         h1 {
             text-align: center;
             color: var(--btn-primary);
             font-size: 28px;
             margin-bottom: 10px;
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(30px);
             animation: floatIn 1s forwards 0.2s;
         }
         @keyframes floatIn {
@@ -56,208 +57,230 @@
         .subtitle {
             text-align: center;
             color: #878787;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             font-size: 15px;
         }
 
-        /* Кнопки тем (горизонтальное меню) */
+        /* --- Меню кнопок (разбросанные, крупные) --- */
         .themes-menu {
             display: flex;
-            gap: 12px;
             flex-wrap: wrap;
             justify-content: center;
-            margin-bottom: 24px;
+            gap: 25px; /* Большой отступ между кнопками */
+            margin-bottom: 30px;
         }
         .theme-btn {
             background: white;
             border: 1px solid #eee;
             color: var(--text);
-            padding: 10px 16px;
+            padding: 16px 24px; /* Кнопки стали крупнее */
             border-radius: 50px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            font-size: 16px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            position: relative;
         }
         .theme-btn:hover {
+            transform: scale(1.05) translateY(-4px);
             background: var(--accent);
             color: white;
-            transform: scale(1.03);
-            box-shadow: 0 4px 12px rgba(255,159,243,0.4);
+            box-shadow: 0 8px 20px rgba(255,159,243,0.4);
         }
         .theme-btn.active {
             background: var(--btn-primary);
             color: white;
+            transform: scale(1.1);
         }
 
-        /* Выезжающая панель */
+        /* --- Выезжающие панели (разные стороны) --- */
         .drawer {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
             z-index: 1000;
+            top: 0; left: 0; right: 0; bottom: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
             transition: opacity 0.3s, visibility 0.3s;
-        }
-        .drawer.open {
-            opacity: 1;
-            visibility: visible;
         }
         .overlay {
             position: absolute;
             inset: 0;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(6px);
+            z-index: 1;
         }
+        
         .panel {
             position: relative;
             background: white;
             width: 90%;
-            max-width: 500px;
+            max-width: 520px;
             max-height: 85vh;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.12);
-            transform: translateX(20px);
-            transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-            overflow-y: auto;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            transform-origin: center;
+            z-index: 2;
+            /* Базовое состояние: панель скрыта за пределами экрана */
+            transform: translate3d(0, 0, 0); 
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
-        .drawer.open .panel {
-            transform: translateX(0);
+
+        /* Специфичные позиции для каждой панели */
+        #drawer-victories .panel { transform: translateX(-110%); } /* Слева */
+        #drawer-cool .panel { transform: translateX(110%); }       /* Справа */
+        #drawer-gallery .panel { transform: translateY(110%); }    /* Снизу */
+        #drawer-playlist .panel { transform: translateY(-110%); } /* Сверху */
+
+        /* Состояние открытой панели */
+        .drawer.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
         }
+        #drawer-victories.open .panel { transform: translateX(0); }
+        #drawer-cool.open .panel { transform: translateX(0); }
+        #drawer-gallery.open .panel { transform: translateY(0); }
+        #drawer-playlist.open .panel { transform: translateY(0); }
+
         .close-btn {
             position: absolute;
-            top: 14px; right: 14px;
+            top: 20px; right: 20px;
             background: none;
             border: none;
-            font-size: 22px;
+            font-size: 32px;
             cursor: pointer;
             color: #999;
+            line-height: 1;
+            padding: 0;
+            z-index: 3;
         }
         .close-btn:hover { color: var(--btn-primary); }
 
-        /* Общие стили карточек (внутри панели) */
-        h3 { color: var(--accent); margin-top: 0; }
+        /* --- Общие стили контента --- */
+        h3 { color: var(--accent); margin-top: 0; margin-bottom: 20px; font-size: 22px;}
         ul { list-style: none; padding: 0; }
-        li { padding: 12px 0; border-bottom: 1px solid #F1F2F6; }
+        li { padding: 14px 0; border-bottom: 1px solid #F1F2F6; }
         li:last-child { border-bottom: none; }
         .badge {
             display: inline-block;
             background: #FFE0E6;
             color: var(--btn-primary);
-            padding: 4px 10px;
-            border-radius: 20px;
+            padding: 6px 12px;
+            border-radius: 12px;
             font-size: 13px;
-            margin-right: 10px;
+            margin-right: 12px;
+            vertical-align: middle;
         }
 
         /* Галерея */
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 8px;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 12px;
         }
         .gallery-img {
             width: 100%;
-            height: 120px;
+            height: 100px;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
         }
-        .gallery-img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.12);
-        }
+        .gallery-img:hover { transform: scale(1.08); }
 
         /* Кнопка поддержки */
         .support-btn {
             display: block;
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             background-color: var(--btn-primary);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 17px;
+            border-radius: 14px;
+            font-size: 18px;
             cursor: pointer;
             text-align: center;
-            transition: transform 0.1s, background-color 0.2s;
+            transition: background-color 0.2s;
+            margin-top: 20px;
         }
         .support-btn:active { transform: scale(0.98); }
 
-        /* Поле для новой победы */
+        /* Поле ввода */
         #new-achievement-input {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: 1px solid #DCDDE4;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            font-size: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            box-sizing: border-box;
         }
         #add-btn {
             background-color: var(--btn-secondary);
             color: #2D3436;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 16px;
         }
 
         /* Плейлист */
         .track-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 8px 0;
+            gap: 15px;
+            padding: 10px 0;
             flex-wrap: wrap;
         }
         .track-num {
             background: #FFE0E6;
             color: var(--btn-primary);
-            width: 24px;
-            height: 24px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 13px;
+            font-size: 14px;
             flex-shrink: 0;
         }
-        .track-info { flex: 1; min-width: 180px; }
-        .track-info strong { display: block; font-size: 15px; }
-        .track-info span { font-size: 13px; color: #878787; }
+        .track-info { flex: 1; min-width: 160px; }
+        .track-info strong { display: block; font-size: 16px; }
+        .track-info span { font-size: 14px; color: #878787; }
         .listen-btn {
             background-color: var(--listen-btn);
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
+            padding: 10px 20px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 14px;
-            transition: background-color 0.2s;
         }
-        .listen-btn:hover { background-color: var(--listen-hover); }
 
         /* Список «Почему ты крутой» */
-        .cool-list { display: flex; flex-direction: column; gap: 12px; }
+        .cool-list { display: flex; flex-direction: column; gap: 14px; }
         .cool-item {
-            padding: 12px;
+            padding: 16px;
             background: #FFF1F2;
-            border-left: 5px solid var(--accent);
-            border-radius: 6px;
-            font-size: 15px;
+            border-left: 6px solid var(--accent);
+            border-radius: 10px;
+            font-size: 16px;
+            line-height: 1.5;
         }
 
         .footer {
             text-align: center;
             font-size: 14px;
             color: #B2BEC3;
-            margin-top: 30px;
+            margin-top: 40px;
         }
     </style>
 </head>
@@ -268,20 +291,22 @@
             <span class="letter">&nbsp;</span>
             <span class="letter">в</span><span class="letter">с</span><span class="letter">ё</span>
             <span class="letter">&nbsp;</span>
-            <span class="letter">с</span><span class="letter">м</span><span class="letter">о</span><span class="letter">ж</span><span class="letter">е</span><span class="letter">ш</span><span class="letter">ь</span>
+            <span class="letter">с</span><span class="letter">м</span><span class="letter">о</span>
+            <span class="letter">ж</span><span class="letter">е</span><span class="letter">ш</span><span class="letter">ь</span>
         </h1>
         <p class="subtitle">Когда тяжело — открой этот сайт. Здесь всё, что напоминает: ты уже столько прошёл.</p>
 
-        <!-- Кнопки тем -->
+        <!-- Кнопки тем (теперь крупные и с отступами) -->
         <div class="themes-menu">
-            <button class="theme-btn active" data-target="victories">Победы</button>
-            <button class="theme-btn" data-target="cool">Почему ты крутой</button>
-            <button class="theme-btn" data-target="gallery">Наши моменты</button>
-            <button class="theme-btn" data-target="playlist">Плейлист</button>
+            <button class="theme-btn active" data-target="victories">🏆 Победы</button>
+            <button class="theme-btn" data-target="cool">💖 Почему ты крутой</button>
+            <button class="theme-btn" data-target="gallery">📸 Наши моменты</button>
+            <button class="theme-btn" data-target="playlist">🎵 Плейлист</button>
         </div>
 
-        <!-- Выезжающие панели (скрыты по умолчанию) -->
-        <!-- Победы -->
+        <!-- Панели (выезжают с разных сторон) -->
+        
+        <!-- 1. Победы (слева) -->
         <div id="drawer-victories" class="drawer">
             <div class="overlay"></div>
             <div class="panel">
@@ -292,14 +317,14 @@
                     <li><span class="badge">Месяц назад</span>Ты покрасил машину и купил четырку.</li>
                     <li><span class="badge">Раньше</span>Вышел на доход 100+к и продолжаешь расти.</li>
                 </ul>
-                <div style="margin-top:18px;">
-                    <input type="text" id="new-achievement-input" placeholder="Что сегодня получилось? Напиши одну строчку…">
+                <div>
+                    <input type="text" id="new-achievement-input" placeholder="Что сегодня получилось?">
                     <button id="add-btn">Добавить</button>
                 </div>
             </div>
         </div>
 
-        <!-- Почему ты крутой -->
+        <!-- 2. Почему ты крутой (справа) -->
         <div id="drawer-cool" class="drawer">
             <div class="overlay"></div>
             <div class="panel">
@@ -309,7 +334,7 @@
             </div>
         </div>
 
-        <!-- Галерея -->
+        <!-- 3. Галерея (снизу) -->
         <div id="drawer-gallery" class="drawer">
             <div class="overlay"></div>
             <div class="panel">
@@ -319,7 +344,7 @@
             </div>
         </div>
 
-        <!-- Плейлист -->
+        <!-- 4. Плейлист (сверху) -->
         <div id="drawer-playlist" class="drawer">
             <div class="overlay"></div>
             <div class="panel">
@@ -329,12 +354,10 @@
             </div>
         </div>
 
-        <!-- Кнопка поддержки (всегда видна внизу) -->
-        <div class="card" style="text-align: center;">
-            <button class="support-btn" onclick="window.open('https://t.me/dar_said', '_blank')">
-                💌 Нажми, если хочется просто услышать «я с тобой»
-            </button>
-        </div>
+        <!-- Кнопка поддержки (всегда видна) -->
+        <button class="support-btn" onclick="window.open('https://t.me/dar_said', '_blank')">
+            💌 Нажми, если хочется просто услышать «я с тобой»
+        </button>
 
         <div class="footer">
             С любовью, Дашулька ❤️
@@ -342,39 +365,14 @@
     </div>
 
     <script>
-        // --- Плейлист ---
-        const playlistData = [
-            { num: 1, title: 'Малиновый закат', artist: 'Макс Корж', link: 'https://music.yandex.ru/album/5489197/track/41747947' },
-            { num: 2, title: '10', artist: 'Эндшпиль feat. Andy Panda', link: 'https://music.yandex.ru/album/6358223/track/46996682' }
-        ];
+        // --- Логика открытия/закрытия панелей ---
+        function openDrawer(targetId) {
+            // Закрываем все панели
+            document.querySelectorAll('.drawer').forEach(d => d.classList.remove('open'));
+            
+            // Убираем активный класс у кнопок
+            document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
 
-        const renderPlaylist = () => {
-            const container = document.getElementById('playlist');
-            playlistData.forEach(track => {
-                const el = document.createElement('div');
-                el.className = 'track-item';
-                el.innerHTML = `
-                    <div class="track-num">${track.num}</div>
-                    <div class="track-info">
-                        <strong>${track.title}</strong>
-                        <span>${track.artist}</span>
-                    </div>
-                    <a href="${track.link}" target="_blank" class="listen-btn">Слушать</a>
-                `;
-                container.appendChild(el);
-            });
-        };
-        renderPlaylist();
-
-        // --- Галерея фото ---
-        const photos = [
-            'https://via.placeholder.com/300x300/FF9FF3/FFFFFF?text=Фото+1',
-            'https://via.placeholder.com/300x300/FF6B81/FFFFFF?text=Фото+2',
-            'https://via.placeholder.com/300x300/FDCB6E/333333?text=Фото+3',
-            'https://via.placeholder.com/300x300/74B3CE/FFFFFF?text=Фото+4'
-        ];
-
-        const renderGallery = () => {
-            const galleryContainer = document.getElementById('gallery');
-            photos.forEach(src => {
-                const img = document.createElement('img');
+            // Открываем нужную
+            const drawer = document.getElementById('drawer-' + targetId);
+            const
