@@ -13,7 +13,6 @@
             --btn-primary: #FF6B81;
             --btn-secondary: #FDCB6E;
             --listen-btn: #FF7675;
-            --listen-hover: #d63031;
         }
 
         body {
@@ -61,7 +60,7 @@
             font-size: 15px;
         }
 
-        /* --- Кнопки тем (крупные, с отступами, не в линию) --- */
+        /* --- Кнопки тем --- */
         .themes-menu {
             display: flex;
             flex-wrap: wrap;
@@ -93,7 +92,7 @@
             transform: scale(1.1);
         }
 
-        /* --- Выезжающие панели (разные стороны) --- */
+        /* --- Выезжающие панели --- */
         .drawer {
             position: fixed;
             z-index: 1000;
@@ -128,11 +127,10 @@
             transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Разные стороны выезда */
-        #drawer-victories .panel { transform: translateX(-110%); } /* слева */
-        #drawer-cool .panel { transform: translateX(110%); }       /* справа */
-        #drawer-gallery .panel { transform: translateY(110%); }    /* снизу */
-        #drawer-playlist .panel { transform: translateY(-110%); }  /* сверху */
+        #drawer-victories .panel { transform: translateX(-110%); }
+        #drawer-cool .panel { transform: translateX(110%); }       
+        #drawer-gallery .panel { transform: translateY(110%); }    
+        #drawer-playlist .panel { transform: translateY(-110%); }  
 
         .drawer.open {
             opacity: 1;
@@ -158,7 +156,7 @@
         }
         .close-btn:hover { color: var(--btn-primary); }
 
-        /* --- Общие стили контента --- */
+        /* --- Контент --- */
         h3 { color: var(--accent); margin-top: 0; margin-bottom: 20px; font-size: 22px;}
         ul { list-style: none; padding: 0; }
         li { padding: 14px 0; border-bottom: 1px solid #F1F2F6; }
@@ -295,7 +293,7 @@
             <button class="theme-btn" data-target="playlist">🎵 Плейлист</button>
         </div>
 
-        <!-- Панели (выезжают с разных сторон) -->
+        <!-- Панели -->
         
         <!-- Победы (слева) -->
         <div id="drawer-victories" class="drawer">
@@ -345,7 +343,7 @@
             </div>
         </div>
 
-        <!-- Кнопка поддержки (всегда видна) -->
+        <!-- Кнопка поддержки -->
         <button class="support-btn" onclick="window.open('https://t.me/dar_said', '_blank')">
             💌 Нажми, если хочется просто услышать «я с тобой»
         </button>
@@ -376,6 +374,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Обработчики кнопок тем ---
             document.querySelectorAll('.theme-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const target = this.getAttribute('data-target');
@@ -383,7 +382,14 @@
                 });
             });
 
-            // --- Плейлист (добавлен Santiz — «Нимфоманка») ---
-            const playlistData = [
-                { num: 1, title: 'Малиновый закат', artist: 'Макс Корж', link: 'https://music.yandex.ru/album/5489197/track/41747947' },
-                { num: 2, title: '10', artist: 'Эндшпиль feat. Andy Panda', link: 'https://music.yandex.ru/album/6358
+            // --- Добавление побед ---
+            const achievementsList = document.getElementById('achievements-list');
+            const newAchievementInput = document.getElementById('new-achievement-input');
+            const addBtn = document.getElementById('add-btn');
+
+            addBtn.addEventListener('click', () => {
+                const text = newAchievementInput.value.trim();
+                if (!text) return;
+
+                const li = document.createElement('li');
+                li.innerHTML = `<span class="badge">Сегодня</span>${text}`;
