@@ -71,4 +71,310 @@
         .theme-btn {
             background: white;
             border: 1px solid #eee;
-            color:
+            color: var(--text);
+            padding: 10px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+        .theme-btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(255,159,243,0.4);
+        }
+        .theme-btn.active {
+            background: var(--btn-primary);
+            color: white;
+        }
+
+        /* Выезжающая панель */
+        .drawer {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .drawer.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+        }
+        .panel {
+            position: relative;
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            max-height: 85vh;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+            transform: translateX(20px);
+            transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+            overflow-y: auto;
+        }
+        .drawer.open .panel {
+            transform: translateX(0);
+        }
+        .close-btn {
+            position: absolute;
+            top: 14px; right: 14px;
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: #999;
+        }
+        .close-btn:hover { color: var(--btn-primary); }
+
+        /* Общие стили карточек (внутри панели) */
+        h3 { color: var(--accent); margin-top: 0; }
+        ul { list-style: none; padding: 0; }
+        li { padding: 12px 0; border-bottom: 1px solid #F1F2F6; }
+        li:last-child { border-bottom: none; }
+        .badge {
+            display: inline-block;
+            background: #FFE0E6;
+            color: var(--btn-primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-right: 10px;
+        }
+
+        /* Галерея */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 8px;
+        }
+        .gallery-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .gallery-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+        }
+
+        /* Кнопка поддержки */
+        .support-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: var(--btn-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.1s, background-color 0.2s;
+        }
+        .support-btn:active { transform: scale(0.98); }
+
+        /* Поле для новой победы */
+        #new-achievement-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #DCDDE4;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+        #add-btn {
+            background-color: var(--btn-secondary);
+            color: #2D3436;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Плейлист */
+        .track-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            flex-wrap: wrap;
+        }
+        .track-num {
+            background: #FFE0E6;
+            color: var(--btn-primary);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+        .track-info { flex: 1; min-width: 180px; }
+        .track-info strong { display: block; font-size: 15px; }
+        .track-info span { font-size: 13px; color: #878787; }
+        .listen-btn {
+            background-color: var(--listen-btn);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .listen-btn:hover { background-color: var(--listen-hover); }
+
+        /* Список «Почему ты крутой» */
+        .cool-list { display: flex; flex-direction: column; gap: 12px; }
+        .cool-item {
+            padding: 12px;
+            background: #FFF1F2;
+            border-left: 5px solid var(--accent);
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 14px;
+            color: #B2BEC3;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="animated-title">
+            <span class="letter">Т</span><span class="letter">ы</span>
+            <span class="letter">&nbsp;</span>
+            <span class="letter">в</span><span class="letter">с</span><span class="letter">ё</span>
+            <span class="letter">&nbsp;</span>
+            <span class="letter">с</span><span class="letter">м</span><span class="letter">о</span><span class="letter">ж</span><span class="letter">е</span><span class="letter">ш</span><span class="letter">ь</span>
+        </h1>
+        <p class="subtitle">Когда тяжело — открой этот сайт. Здесь всё, что напоминает: ты уже столько прошёл.</p>
+
+        <!-- Кнопки тем -->
+        <div class="themes-menu">
+            <button class="theme-btn active" data-target="victories">Победы</button>
+            <button class="theme-btn" data-target="cool">Почему ты крутой</button>
+            <button class="theme-btn" data-target="gallery">Наши моменты</button>
+            <button class="theme-btn" data-target="playlist">Плейлист</button>
+        </div>
+
+        <!-- Выезжающие панели (скрыты по умолчанию) -->
+        <!-- Победы -->
+        <div id="drawer-victories" class="drawer">
+            <div class="overlay"></div>
+            <div class="panel">
+                <button class="close-btn" onclick="closeDrawer('victories')">&times;</button>
+                <h3>Твои победы (даже маленькие)</h3>
+                <ul id="achievements-list">
+                    <li><span class="badge">Недавно</span>Ты понял, что сделал почти все цели, что ставил на новый год.</li>
+                    <li><span class="badge">Месяц назад</span>Ты покрасил машину и купил четырку.</li>
+                    <li><span class="badge">Раньше</span>Вышел на доход 100+к и продолжаешь расти.</li>
+                </ul>
+                <div style="margin-top:18px;">
+                    <input type="text" id="new-achievement-input" placeholder="Что сегодня получилось? Напиши одну строчку…">
+                    <button id="add-btn">Добавить</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Почему ты крутой -->
+        <div id="drawer-cool" class="drawer">
+            <div class="overlay"></div>
+            <div class="panel">
+                <button class="close-btn" onclick="closeDrawer('cool')">&times;</button>
+                <h3>Почему ты крутой</h3>
+                <div class="cool-list" id="cool-list"></div>
+            </div>
+        </div>
+
+        <!-- Галерея -->
+        <div id="drawer-gallery" class="drawer">
+            <div class="overlay"></div>
+            <div class="panel">
+                <button class="close-btn" onclick="closeDrawer('gallery')">&times;</button>
+                <h3>Наши моменты</h3>
+                <div class="gallery" id="gallery"></div>
+            </div>
+        </div>
+
+        <!-- Плейлист -->
+        <div id="drawer-playlist" class="drawer">
+            <div class="overlay"></div>
+            <div class="panel">
+                <button class="close-btn" onclick="closeDrawer('playlist')">&times;</button>
+                <h3>Твой плейлист для силы</h3>
+                <div id="playlist"></div>
+            </div>
+        </div>
+
+        <!-- Кнопка поддержки (всегда видна внизу) -->
+        <div class="card" style="text-align: center;">
+            <button class="support-btn" onclick="window.open('https://t.me/dar_said', '_blank')">
+                💌 Нажми, если хочется просто услышать «я с тобой»
+            </button>
+        </div>
+
+        <div class="footer">
+            С любовью, Дашулька ❤️
+        </div>
+    </div>
+
+    <script>
+        // --- Плейлист ---
+        const playlistData = [
+            { num: 1, title: 'Малиновый закат', artist: 'Макс Корж', link: 'https://music.yandex.ru/album/5489197/track/41747947' },
+            { num: 2, title: '10', artist: 'Эндшпиль feat. Andy Panda', link: 'https://music.yandex.ru/album/6358223/track/46996682' }
+        ];
+
+        const renderPlaylist = () => {
+            const container = document.getElementById('playlist');
+            playlistData.forEach(track => {
+                const el = document.createElement('div');
+                el.className = 'track-item';
+                el.innerHTML = `
+                    <div class="track-num">${track.num}</div>
+                    <div class="track-info">
+                        <strong>${track.title}</strong>
+                        <span>${track.artist}</span>
+                    </div>
+                    <a href="${track.link}" target="_blank" class="listen-btn">Слушать</a>
+                `;
+                container.appendChild(el);
+            });
+        };
+        renderPlaylist();
+
+        // --- Галерея фото ---
+        const photos = [
+            'https://via.placeholder.com/300x300/FF9FF3/FFFFFF?text=Фото+1',
+            'https://via.placeholder.com/300x300/FF6B81/FFFFFF?text=Фото+2',
+            'https://via.placeholder.com/300x300/FDCB6E/333333?text=Фото+3',
+            'https://via.placeholder.com/300x300/74B3CE/FFFFFF?text=Фото+4'
+        ];
+
+        const renderGallery = () => {
+            const galleryContainer = document.getElementById('gallery');
+            photos.forEach(src => {
+                const img = document.createElement('img');
