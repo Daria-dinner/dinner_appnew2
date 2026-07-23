@@ -30,7 +30,7 @@
             margin: 0 auto;
         }
 
-        /* --- Анимация заголовка --- */
+        /* --- Анимация заголовка (оставляем, она не навязчивая) --- */
         h1 {
             text-align: center;
             color: var(--btn-primary);
@@ -60,36 +60,42 @@
             font-size: 15px;
         }
 
-        /* --- Кнопки тем --- */
+        /* --- Темы как карточки-колонки (стиль журнала) --- */
         .themes-menu {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
             justify-content: center;
-            gap: 25px;
             margin-bottom: 30px;
         }
-        .theme-btn {
+        .theme-card {
             background: white;
             border: 1px solid #eee;
-            color: var(--text);
-            padding: 16px 24px;
-            border-radius: 50px;
+            padding: 18px 12px;
+            border-radius: 14px;
             cursor: pointer;
-            font-weight: 600;
-            font-size: 16px;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            text-align: center;
+            transition: background-color 0.25s, border-color 0.25s;
+            user-select: none;
         }
-        .theme-btn:hover {
-            transform: scale(1.05) translateY(-4px);
-            background: var(--accent);
-            color: white;
-            box-shadow: 0 8px 20px rgba(255,159,243,0.4);
+        .theme-card:hover {
+            background: #FAFAFA;
+            border-color: #ddd;
         }
-        .theme-btn.active {
+        .theme-card.active {
             background: var(--btn-primary);
+            border-color: var(--btn-primary);
             color: white;
-            transform: scale(1.1);
+        }
+        .theme-card strong {
+            display: block;
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+        .theme-card span {
+            font-size: 13px;
+            color: #888;
         }
 
         /* --- Выезжающие панели --- */
@@ -183,9 +189,9 @@
             object-fit: cover;
             border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: filter 0.2s;
         }
-        .gallery-img:hover { transform: scale(1.08); }
+        .gallery-img:hover { filter: brightness(0.9); }
 
         .support-btn {
             display: block;
@@ -201,7 +207,7 @@
             transition: background-color 0.2s;
             margin-top: 20px;
         }
-        .support-btn:active { transform: scale(0.98); }
+        .support-btn:active { transform: none; }
 
         #new-achievement-input {
             width: 100%;
@@ -285,12 +291,24 @@
         </h1>
         <p class="subtitle">Когда тяжело — открой этот сайт. Здесь всё, что напоминает: ты уже столько прошёл.</p>
 
-        <!-- Кнопки тем -->
+        <!-- Темы как карточки (не кнопки) -->
         <div class="themes-menu">
-            <button class="theme-btn active" data-target="victories">🏆 Победы</button>
-            <button class="theme-btn" data-target="cool">💖 Почему ты крутой</button>
-            <button class="theme-btn" data-target="gallery">📸 Наши моменты</button>
-            <button class="theme-btn" data-target="playlist">🎵 Плейлист</button>
+            <div class="theme-card active" data-target="victories">
+                <strong>🏆 Победы</strong>
+                <span>Твои достижения</span>
+            </div>
+            <div class="theme-card" data-target="cool">
+                <strong>💖 Почему ты крутой</strong>
+                <span>Напоминание о себе</span>
+            </div>
+            <div class="theme-card" data-target="gallery">
+                <strong>📸 Наши моменты</strong>
+                <span>Важные фото</span>
+            </div>
+            <div class="theme-card" data-target="playlist">
+                <strong>🎵 Плейлист</strong>
+                <span>Музыка для силы</span>
+            </div>
         </div>
 
         <!-- Панели -->
@@ -357,39 +375,96 @@
         // --- Логика открытия/закрытия панелей ---
         function openDrawer(targetId) {
             document.querySelectorAll('.drawer').forEach(d => d.classList.remove('open'));
-            document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.theme-card').forEach(b => b.classList.remove('active'));
 
             const drawer = document.getElementById('drawer-' + targetId);
-            const btn = Array.from(document.querySelectorAll('.theme-btn')).find(b => b.getAttribute('data-target') === targetId);
+            const card = Array.from(document.querySelectorAll('.theme-card')).find(b => b.getAttribute('data-target') === targetId);
 
             if (drawer) drawer.classList.add('open');
-            if (btn) btn.classList.add('active');
+            if (card) card.classList.add('active');
         }
 
         function closeDrawer(targetId) {
             const drawer = document.getElementById('drawer-' + targetId);
             if (drawer) drawer.classList.remove('open');
 
-            document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.theme-card').forEach(b => b.classList.remove('active'));
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Обработчики кнопок тем ---
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
+            // --- Обработчики карточек тем ---
+            document.querySelectorAll('.theme-card').forEach(card => {
+                card.addEventListener('click', function() {
                     const target = this.getAttribute('data-target');
                     openDrawer(target);
                 });
             });
 
             // --- Добавление побед ---
-            const achievementsList = document.getElementById('achievements-list');
-            const newAchievementInput = document.getElementById('new-achievement-input');
-            const addBtn = document.getElementById('add-btn');
-
             addBtn.addEventListener('click', () => {
                 const text = newAchievementInput.value.trim();
                 if (!text) return;
 
                 const li = document.createElement('li');
                 li.innerHTML = `<span class="badge">Сегодня</span>${text}`;
+                achievementsList.prepend(li);
+                newAchievementInput.value = '';
+            });
+
+            // --- Плейлист ---
+            const playlistData = [
+                 { num: 1, title: 'Малиновый закат', artist: 'Макс Корж', link: 'https://music.yandex.ru/album/5489197/track/41747947' },
+            { num: 2, title: '10', artist: 'Эндшпиль feat. Andy Panda', link: 'https://music.yandex.ru/album/6358223/track/46996682' }
+        ];
+
+
+            const playlistContainer = document.getElementById('playlist');
+            playlistData.forEach(track => {
+                const div = document.createElement('div');
+                div.className = 'track-item';
+                div.innerHTML = `
+                    <div class="track-num">${track.num}</div>
+                    <div class="track-info">
+                        <strong>${track.title}</strong>
+                        <span>${track.artist}</span>
+                    </div>
+                    <button class="listen-btn">Слушать</button>
+                `;
+                playlistContainer.appendChild(div);
+            });
+
+            // --- Почему ты крутой (заглушка) ---
+            const coolList = document.getElementById('cool-list');
+            const coolItems = [
+                'Ты не сдался, когда всё валилось из рук — это сила.',
+                'Умеешь замечать хорошее даже в тяжёлых днях — это редкий дар.',
+                'Держишь слово и делаешь, даже когда не хочется — на тебя можно положиться.',
+                'Не боишься пробовать новое и ошибаться — так растут настоящие люди.',
+                'Ты заботишься о других, даже когда самому непросто.'
+            ];
+            coolItems.forEach(text => {
+                const div = document.createElement('div');
+                div.className = 'cool-item';
+                div.textContent = text;
+                coolList.appendChild(div);
+            });
+
+            // --- Галерея (заглушка картинками) ---
+            const gallery = document.getElementById('gallery');
+            const imageUrls = [
+                'https://images.unsplash.com/photo-1506744038136-4627383bb870?w=400&q=80',
+                'https://images.unsplash.com/photo-1494790108377-be5eaf7b7a31?w=400&q=80',
+                'https://images.unsplash.com/photo-1519741497674-60d3430f9d64?w=400&q=80',
+                'https://images.unsplash.com/photo-1571996349750-e0c28a1e1b54?w=400&q=80'
+            ];
+            imageUrls.forEach(url => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'Момент';
+                img.className = 'gallery-img';
+                gallery.appendChild(img);
+            });
+        });
+    </script>
+</body>
+</html>
