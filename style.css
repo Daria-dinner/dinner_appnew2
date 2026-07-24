@@ -1,0 +1,219 @@
+:root {
+  --bg: #f9f9f9;
+  --paper: #ffffff;
+  --text: #1a1a1a;
+  --accent: #2c3e50;
+  --gold: #d4af37;
+  --border: #e0e0e0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 120px 20px 60px;
+}
+
+.animated-title {
+  font-size: 4rem;
+  font-weight: 700;
+  letter-spacing: -2px;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s forwards 0.2s;
+}
+
+.subtitle {
+  margin-top: 16px;
+  font-style: italic;
+  color: #555;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 1s forwards 0.5s;
+}
+
+@keyframes fadeInUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Секции */
+.section { margin-bottom: 80px; }
+.section-title {
+  font-size: 2.2rem;
+  margin-bottom: 32px;
+  border-left: 4px solid var(--gold);
+  padding-left: 16px;
+}
+
+/* Карточки побед */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+.card {
+  background: var(--paper);
+  padding: 28px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+.card-number {
+  color: var(--gold);
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Плейлист */
+.playlist { list-style: none; }
+.track {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: default; /* чтобы не было двойного клика при нажатии кнопки */
+}
+.track:last-child { border-bottom: none; }
+.track-num {
+  width: 36px;
+  text-align: center;
+  color: var(--accent);
+  font-weight: bold;
+}
+.track-info { flex: 1; }
+.track-title { display: block; font-weight: 600; }
+.track-artist { display: block; color: #666; font-size: 0.9rem; }
+
+/* Кнопки */
+.btn-primary {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+}
+.btn-primary:hover { background: #1a2d3a; }
+
+.btn-listen {
+  background: var(--gold);
+  color: #1a1a1a;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+.btn-listen:hover { background: #b58e2b; }
+
+.btn-control {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-control:hover { background: var(--accent); color: white; }
+
+/* Аудиоплеер */
+.player-wrapper {
+  background: var(--paper);
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 24px;
+}
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.progress-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.time { font-size: 0.85rem; color: #555; min-width: 30px; text-align: right; }
+.progress-bar {
+  flex: 1;
+  height: 6px;
+  background: #ddd;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+#progress-fill {
+  height: 100%;
+  background: var(--accent);
+  width: 0%;
+  transition: width 0.1s linear;
+}
+.volume-slider {
+  width: 80px;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: #ddd;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+.track-now {
+  margin-top: 12px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Поддержка */
+.support-quotes {
+  background: #fffdf5;
+  padding: 30px;
+  border-left: 5px solid var(--gold);
+  position: relative;
+  overflow: hidden;
+}
+.quote {
+  margin-bottom: 20px;
+  font-style: italic;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s ease-
