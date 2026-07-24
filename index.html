@@ -1,470 +1,159 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ты всё сможешь ❤️</title>
-    <style>
-        :root {
-            --bg-color: #FFF0F5;
-            --card-bg: #FFFFFF;
-            --accent: #FF9FF3;
-            --text: #2D3436;
-            --btn-primary: #FF6B81;
-            --btn-secondary: #FDCB6E;
-            --listen-btn: #FF7675;
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Журнал поддержки</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <h1 class="animated-title">Ты всё сможешь</h1>
+      <p class="subtitle">Журнал гордости, побед и поддержки</p>
+    </header>
 
-        body {
-            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+    <main class="container">
+      <!-- Победы -->
+      <section class="section">
+        <h2 class="section-title">Его победы</h2>
+        <div class="cards-grid">
+          <article class="card">
+            <div class="card-number">01</div>
+            <h3>Первая большая победа</h3>
+            <p>Ты добился многого, за такой небольшой срок. Мне хочется, чтобы ты забывал: то, что есть сейчас - год назад было мечтой.</p>
+          </article>
+          <article class="card">
+            <div class="card-number">02</div>
+            <h3>Победа над страхом</h3>
+            <p>Ты решился на то, что долго откладывал. Это дорогого стоит.</p>
+          </article>
+          <article class="card">
+            <div class="card-number">03</div>
+            <h3>Тихая, но важная победа</h3>
+            <p>Иногда самое ценное — просто не сдаться. И ты не сдался.</p>
+          </article>
+        </div>
+      </section>
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
+      <!-- Встроенный плеер + плейлист -->
+      <section class="section">
+        <h2 class="section-title" style="margin-bottom: 24px;">Плейлист для силы</h2>
 
-        /* --- Анимация заголовка (оставляем, она не навязчивая) --- */
-        h1 {
-            text-align: center;
-            color: var(--btn-primary);
-            font-size: 28px;
-            margin-bottom: 10px;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: floatIn 1s forwards 0.2s;
-        }
-        @keyframes floatIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .letter {
-            display: inline-block;
-            animation: popIn 0.6s forwards;
-        }
-        @keyframes popIn {
-            0% { transform: scale(0.3) rotate(-20deg); opacity: 0; }
-            60% { transform: scale(1.1) rotate(0deg); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #878787;
-            margin-bottom: 40px;
-            font-size: 15px;
-        }
-
-        /* --- Темы как карточки-колонки (стиль журнала) --- */
-        .themes-menu {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 16px;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-        .theme-card {
-            background: white;
-            border: 1px solid #eee;
-            padding: 18px 12px;
-            border-radius: 14px;
-            cursor: pointer;
-            text-align: center;
-            transition: background-color 0.25s, border-color 0.25s;
-            user-select: none;
-        }
-        .theme-card:hover {
-            background: #FAFAFA;
-            border-color: #ddd;
-        }
-        .theme-card.active {
-            background: var(--btn-primary);
-            border-color: var(--btn-primary);
-            color: white;
-        }
-        .theme-card strong {
-            display: block;
-            font-weight: 600;
-            font-size: 15px;
-            margin-bottom: 6px;
-        }
-        .theme-card span {
-            font-size: 13px;
-            color: #888;
-        }
-
-        /* --- Выезжающие панели --- */
-        .drawer {
-            position: fixed;
-            z-index: 1000;
-            top: 0; left: 0; right: 0; bottom: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: opacity 0.3s, visibility 0.3s;
-        }
-        .overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.55);
-            backdrop-filter: blur(6px);
-            z-index: 1;
-        }
-        .panel {
-            position: relative;
-            background: white;
-            width: 90%;
-            max-width: 520px;
-            max-height: 85vh;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-            transform-origin: center;
-            z-index: 2;
-            transform: translate3d(0, 0, 0); 
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        #drawer-victories .panel { transform: translateX(-110%); }
-        #drawer-cool .panel { transform: translateX(110%); }       
-        #drawer-gallery .panel { transform: translateY(110%); }    
-        #drawer-playlist .panel { transform: translateY(-110%); }  
-
-        .drawer.open {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: all;
-        }
-        #drawer-victories.open .panel { transform: translateX(0); }
-        #drawer-cool.open .panel { transform: translateX(0); }
-        #drawer-gallery.open .panel { transform: translateY(0); }
-        #drawer-playlist.open .panel { transform: translateY(0); }
-
-        .close-btn {
-            position: absolute;
-            top: 20px; right: 20px;
-            background: none;
-            border: none;
-            font-size: 32px;
-            cursor: pointer;
-            color: #999;
-            line-height: 1;
-            padding: 0;
-            z-index: 3;
-        }
-        .close-btn:hover { color: var(--btn-primary); }
-
-        /* --- Контент --- */
-        h3 { color: var(--accent); margin-top: 0; margin-bottom: 20px; font-size: 22px;}
-        ul { list-style: none; padding: 0; }
-        li { padding: 14px 0; border-bottom: 1px solid #F1F2F6; }
-        li:last-child { border-bottom: none; }
-        .badge {
-            display: inline-block;
-            background: #FFE0E6;
-            color: var(--btn-primary);
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 13px;
-            margin-right: 12px;
-            vertical-align: middle;
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 12px;
-        }
-        .gallery-img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: filter 0.2s;
-        }
-        .gallery-img:hover { filter: brightness(0.9); }
-
-        .support-btn {
-            display: block;
-            width: 100%;
-            padding: 16px;
-            background-color: var(--btn-primary);
-            color: white;
-            border: none;
-            border-radius: 14px;
-            font-size: 18px;
-            cursor: pointer;
-            text-align: center;
-            transition: background-color 0.2s;
-            margin-top: 20px;
-        }
-        .support-btn:active { transform: none; }
-
-        #new-achievement-input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #DCDDE4;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        #add-btn {
-            background-color: var(--btn-secondary);
-            color: #2D3436;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .track-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 10px 0;
-            flex-wrap: wrap;
-        }
-        .track-num {
-            background: #FFE0E6;
-            color: var(--btn-primary);
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-        .track-info { flex: 1; min-width: 160px; }
-        .track-info strong { display: block; font-size: 16px; }
-        .track-info span { font-size: 14px; color: #878787; }
-        .listen-btn {
-            background-color: var(--listen-btn);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .cool-list { display: flex; flex-direction: column; gap: 14px; }
-        .cool-item {
-            padding: 16px;
-            background: #FFF1F2;
-            border-left: 6px solid var(--accent);
-            border-radius: 10px;
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        .footer {
-            text-align: center;
-            font-size: 14px;
-            color: #B2BEC3;
-            margin-top: 40px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1 id="animated-title">
-            <span class="letter">Т</span><span class="letter">ы</span>
-            <span class="letter">&nbsp;</span>
-            <span class="letter">в</span><span class="letter">с</span><span class="letter">ё</span>
-            <span class="letter">&nbsp;</span>
-            <span class="letter">с</span><span class="letter">м</span><span class="letter">о</span>
-            <span class="letter">ж</span><span class="letter">е</span><span class="letter">ш</span><span class="letter">ь</span>
-        </h1>
-        <p class="subtitle">Когда тяжело — открой этот сайт. Здесь всё, что напоминает: ты уже столько прошёл.</p>
-
-        <!-- Темы как карточки (не кнопки) -->
-        <div class="themes-menu">
-            <div class="theme-card active" data-target="victories">
-                <strong>🏆 Победы</strong>
-                <span>Твои достижения</span>
+        <!-- Встроенный аудиоплеер -->
+        <div class="player-wrapper">
+          <audio id="main-audio" preload="metadata">
+            <!-- Сюда можно добавить свои файлы, если есть mp3 -->
+            <!-- <source src="assets/track1.mp3" type="audio/mpeg"> -->
+          </audio>
+          <div class="player-controls">
+            <button id="play-pause-btn" class="btn-control" title="Play/Pause">▶</button>
+            <div class="progress-container">
+              <span id="current-time" class="time">0:00</span>
+              <div id="progress-bar" class="progress-bar"><div id="progress-fill"></div></div>
+              <span id="duration" class="time">0:00</span>
             </div>
-            <div class="theme-card" data-target="cool">
-                <strong>💖 Почему ты крутой</strong>
-                <span>Напоминание о себе</span>
-            </div>
-            <div class="theme-card" data-target="gallery">
-                <strong>📸 Наши моменты</strong>
-                <span>Важные фото</span>
-            </div>
-            <div class="theme-card" data-target="playlist">
-                <strong>🎵 Плейлист</strong>
-                <span>Музыка для силы</span>
-            </div>
+            <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.1" value="0.8">
+          </div>
+          <div class="track-now">
+            <span id="track-display">Выберите трек из списка ниже</span>
+          </div>
         </div>
 
-        <!-- Панели -->
-        
-        <!-- Победы (слева) -->
-        <div id="drawer-victories" class="drawer">
-            <div class="overlay"></div>
-            <div class="panel">
-                <button class="close-btn" onclick="closeDrawer('victories')">&times;</button>
-                <h3>Твои победы (даже маленькие)</h3>
-                <ul id="achievements-list">
-                    <li><span class="badge">Недавно</span>Ты понял, что сделал почти все цели, что ставил на новый год.</li>
-                    <li><span class="badge">Месяц назад</span>Ты покрасил машину и купил четырку.</li>
-                    <li><span class="badge">Раньше</span>Вышел на доход 100+к и продолжаешь расти.</li>
-                </ul>
-                <div>
-                    <input type="text" id="new-achievement-input" placeholder="Что сегодня получилось?">
-                    <button id="add-btn">Добавить</button>
-                </div>
-            </div>
+        <!-- Список треков с кнопками -->
+        <ul class="playlist">
+          <li class="track" data-src="" data-duration="3:45">
+            <span class="track-num">01</span>
+            <span class="track-info">
+              <span class="track-title">Малиновый закат</span>
+              <span class="track-artist">Макс Корж</span>
+            </span>
+            <a href="https://music.yandex.ru/search?text=Макс+Корж+Малиновый+закат" target="_blank" class="btn-listen">Слушать в Я.Музыке</a>
+          </li>
+          <li class="track" data-src="" data-duration="2:58">
+            <span class="track-num">02</span>
+            <span class="track-info">
+              <span class="track-title">10</span>
+              <span class="track-artist">Эндшпиль</span>
+            </span>
+            <a href="https://music.yandex.ru/search?text=Эндшпиль+10" target="_blank" class="btn-listen">Слушать в Я.Музыке</a>
+          </li>
+          <li class="track" data-src="" data-duration="3:12">
+            <span class="track-num">03</span>
+            <span class="track-info">
+              <span class="track-title">Нимфоманка</span>
+              <span class="track-artist">Santiz</span>
+            </span>
+            <a href="https://music.yandex.ru/search?text=Santiz+Нимфоманка" target="_blank" class="btn-listen">Слушать в Я.Музыке</a>
+          </li>
+          <li class="track" data-src="" data-duration="4:05">
+            <span class="track-num">04</span>
+            <span class="track-info">
+              <span class="track-title">I Got Love</span>
+              <span class="track-artist">MiyaGi & Эндшпиль</span>
+            </span>
+            <a href="https://music.yandex.ru/search?text=MiyaGi+I+Got+Love" target="_blank" class="btn-listen">Слушать в Я.Музыке</a>
+          </li>
+          <li class="track" data-src="" data-duration="3:30">
+            <span class="track-num">05</span>
+            <span class="track-info">
+              <span class="track-title">Зверь</span>
+              <span class="track-artist">Guf</span>
+            </span>
+            <a href="https://music.yandex.ru/search?text=Guf+Зверь" target="_blank" class="btn-listen">Слушать в Я.Музыке</a>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Слова поддержки + кнопка случайной цитаты -->
+      <section class="section">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
+          <h2 class="section-title" style="margin: 0;">Когда тяжело</h2>
+          <button id="random-quote-btn" class="btn-primary">Случайная цитата</button>
         </div>
-
-        <!-- Почему ты крутой (справа) -->
-        <div id="drawer-cool" class="drawer">
-            <div class="overlay"></div>
-            <div class="panel">
-                <button class="close-btn" onclick="closeDrawer('cool')">&times;</button>
-                <h3>Почему ты крутой</h3>
-                <div class="cool-list" id="cool-list"></div>
-            </div>
+        <div class="support-quotes">
+          <blockquote class="quote active-quote">
+            «Ты сильнее, чем думаешь. Даже если сейчас тяжело — это временно.»
+          </blockquote>
+          <blockquote class="quote">
+            «Я горжусь тем, как ты справляешься. Даже маленькие шаги — это победы.»
+          </blockquote>
+          <blockquote class="quote">
+            «Если станет совсем тяжело — вот ссылка: <a href="https://t.me/dar_said" target="_blank" class="support-link">напиши мне</a>. Я тут.»
+          </blockquote>
+          <blockquote class="quote">
+            «Помни: ты уже столько всего преодолел. Эта трудность — не исключение.»
+          </blockquote>
+          <blockquote class="quote">
+            «Иногда достаточно просто сделать один маленький шаг. И ты его уже делаешь.»
+          </blockquote>
         </div>
+      </section>
 
-        <!-- Галерея (снизу) -->
-        <div id="drawer-gallery" class="drawer">
-            <div class="overlay"></div>
-            <div class="panel">
-                <button class="close-btn" onclick="closeDrawer('gallery')">&times;</button>
-                <h3>Наши моменты</h3>
-                <div class="gallery" id="gallery"></div>
-            </div>
+      <!-- Моменты из жизни -->
+      <section class="section">
+        <h2 class="section-title">Почему я им горжусь</h2>
+        <div class="moments">
+          <div class="moment-item">
+            <h3>Момент 1: тот день, когда всё сложилось</h3>
+            <p>Я никогда не забуду 24 июня 2025 года. В этот день жизнь подарила мне возможность, просыпаться с твоими глвзвми напротив.</p>
+          </div>
+          <div class="moment-item">
+            <h3>Момент 2: когда он поддержал тебя</h3>
+            <p>Каждый раз, когда мне тяжело - ты рядом и я безумно это ценю.</p>
+          </div>
+          <div class="moment-item">
+            <h3>Момент 3: мелочи, которые важны</h3>
+            <p>Я помню каждый день, когда ты был раздражителен, но пытался себя сдерживать, дабы не обидеть меня.</p>
+          </div>
         </div>
+      </section>
+    </main>
 
-        <!-- Плейлист (сверху) -->
-        <div id="drawer-playlist" class="drawer">
-            <div class="overlay"></div>
-            <div class="panel">
-                <button class="close-btn" onclick="closeDrawer('playlist')">&times;</button>
-                <h3>Твой плейлист для силы</h3>
-                <div id="playlist"></div>
-            </div>
-        </div>
+    <footer class="footer">
+      <p>Сделано с любовью специально для тебя, твоя Дашулька</p>
+      <a href="https://github.com/твой-ник/my-journal-site" target="_blank" class="github-link">GitHub проекта</a>
+    </footer>
 
-        <!-- Кнопка поддержки -->
-        <button class="support-btn" onclick="window.open('https://t.me/dar_said', '_blank')">
-            💌 Нажми, если хочется просто услышать «я с тобой»
-        </button>
-
-        <div class="footer">
-            С любовью, Дашулька ❤️
-        </div>
-    </div>
-
-    <script>
-        // --- Логика открытия/закрытия панелей ---
-        function openDrawer(targetId) {
-            document.querySelectorAll('.drawer').forEach(d => d.classList.remove('open'));
-            document.querySelectorAll('.theme-card').forEach(b => b.classList.remove('active'));
-
-            const drawer = document.getElementById('drawer-' + targetId);
-            const card = Array.from(document.querySelectorAll('.theme-card')).find(b => b.getAttribute('data-target') === targetId);
-
-            if (drawer) drawer.classList.add('open');
-            if (card) card.classList.add('active');
-        }
-
-        function closeDrawer(targetId) {
-            const drawer = document.getElementById('drawer-' + targetId);
-            if (drawer) drawer.classList.remove('open');
-
-            document.querySelectorAll('.theme-card').forEach(b => b.classList.remove('active'));
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Обработчики карточек тем ---
-            document.querySelectorAll('.theme-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const target = this.getAttribute('data-target');
-                    openDrawer(target);
-                });
-            });
-
-            // --- Добавление побед ---
-            addBtn.addEventListener('click', () => {
-                const text = newAchievementInput.value.trim();
-                if (!text) return;
-
-                const li = document.createElement('li');
-                li.innerHTML = `<span class="badge">Сегодня</span>${text}`;
-                achievementsList.prepend(li);
-                newAchievementInput.value = '';
-            });
-
-            // --- Плейлист ---
-            const playlistData = [
-                 { num: 1, title: 'Малиновый закат', artist: 'Макс Корж', link: 'https://music.yandex.ru/album/5489197/track/41747947' },
-            { num: 2, title: '10', artist: 'Эндшпиль feat. Andy Panda', link: 'https://music.yandex.ru/album/6358223/track/46996682' }
-        ];
-
-
-            const playlistContainer = document.getElementById('playlist');
-            playlistData.forEach(track => {
-                const div = document.createElement('div');
-                div.className = 'track-item';
-                div.innerHTML = `
-                    <div class="track-num">${track.num}</div>
-                    <div class="track-info">
-                        <strong>${track.title}</strong>
-                        <span>${track.artist}</span>
-                    </div>
-                    <button class="listen-btn">Слушать</button>
-                `;
-                playlistContainer.appendChild(div);
-            });
-
-            // --- Почему ты крутой (заглушка) ---
-            const coolList = document.getElementById('cool-list');
-            const coolItems = [
-                'Ты не сдался, когда всё валилось из рук — это сила.',
-                'Умеешь замечать хорошее даже в тяжёлых днях — это редкий дар.',
-                'Держишь слово и делаешь, даже когда не хочется — на тебя можно положиться.',
-                'Не боишься пробовать новое и ошибаться — так растут настоящие люди.',
-                'Ты заботишься о других, даже когда самому непросто.'
-            ];
-            coolItems.forEach(text => {
-                const div = document.createElement('div');
-                div.className = 'cool-item';
-                div.textContent = text;
-                coolList.appendChild(div);
-            });
-
-            // --- Галерея (заглушка картинками) ---
-            const gallery = document.getElementById('gallery');
-            const imageUrls = [
-                'https://images.unsplash.com/photo-1506744038136-4627383bb870?w=400&q=80',
-                'https://images.unsplash.com/photo-1494790108377-be5eaf7b7a31?w=400&q=80',
-                'https://images.unsplash.com/photo-1519741497674-60d3430f9d64?w=400&q=80',
-                'https://images.unsplash.com/photo-1571996349750-e0c28a1e1b54?w=400&q=80'
-            ];
-            imageUrls.forEach(url => {
-                const img = document.createElement('img');
-                img.src = url;
-                img.alt = 'Момент';
-                img.className = 'gallery-img';
-                gallery.appendChild(img);
-            });
-        });
-    </script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
